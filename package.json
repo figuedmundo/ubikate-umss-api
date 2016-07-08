@@ -2,8 +2,14 @@
   "name": "ubikate-umss-api",
   "version": "0.0.0",
   "private": true,
+  "license": "MIT",
+  "repository": "n/a",
+  "author": "Steven",
   "scripts": {
-    "start": "node ./bin/www"
+    "lint": "eslint app.js",
+    "_start": "babel-node ./bin/www",
+    "start": "nodemon ./bin/www --exec babel-node --presets es2015,stage-2",
+    "auto-start": "nodemon --exec \"npm run lint && npm start\" --ignore public/js"
   },
   "dependencies": {
     "bluebird": "^3.4.1",
@@ -16,5 +22,12 @@
     "knex": "^0.11.7",
     "morgan": "~1.7.0",
     "serve-favicon": "~2.3.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.10.1",
+    "babel-eslint": "^6.1.0",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-stage-2": "^6.11.0",
+    "nodemon": "*"
   }
 }
