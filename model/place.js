@@ -1,12 +1,11 @@
 'use strict';
 
-import db from '../config/database';
-
-let Bookshelf = db.bookshelf;
+import Bookshelf from '../config/database';
 
 // require('./invoice');
 var Place = Bookshelf.Model.extend({
   tableName: 'place',
+  idAttribute: 'gid'
   // hasTimestamps: true,
 
   // invoices: function() {

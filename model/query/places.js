@@ -1,9 +1,9 @@
 'use strict';
 
-import db from '../config/database';
-import Place  from '../model/place';
+import Bookshelf from '../../config/database';
+import Place  from '../../model/place';
 
-let Knex = db.knex;
+let Knex = Bookshelf.knex;
 
 
 var getAll = (req, res) => {
@@ -11,7 +11,7 @@ var getAll = (req, res) => {
       "               , ST_AsGeoJSON(geom)::json As geometry " +
       "               , to_json((name)) As name " +
       "               , to_json((gid)) As id " +
-      "             FROM place";
+      "      FROM place";
 
   // new Place()
   //   .fetchAll()
@@ -41,6 +41,27 @@ var getAll = (req, res) => {
 
 };
 
+var getPlace = (req, res) => {
+  let id = req.params.id;
+
+  let raw = "SELECT " +
+              " ST_AsGeoJSON(geom)::json As geometry," +
+              " name," +
+              " gid As id " +
+            " FROM place WHERE gid = " + id;
+
+  Bookshelf.knex.raw(raw)
+    .then((data) => {
+      res.json(data.rows[0]);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.send("Error");
+    });
+};
+
+//
 module.exports = {
-    getAll: getAll
+    getAll: getAll,
+    getPlace: getPlace
 };

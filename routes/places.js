@@ -2,11 +2,13 @@
 
 // Import node module
 import express from 'express';
-import placesQuery from '../model/query';
+import places from '../model/query/places';
 
 const router = express.Router();
 
-router.get('/', placesQuery.getAll);
+router.get('/', places.getAll);
+router.get('/:id', places.getPlace);
+
 
 // Exporting an object as the default import for this module
 export default router;

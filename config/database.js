@@ -7,5 +7,5 @@ let bookshelf = require('bookshelf')(knex);
 
 bookshelf.plugin('registry'); // Resolve circular dependencies with relations
 
-module.exports.bookshelf = bookshelf;
+module.exports = bookshelf;
 module.exports.knex = knex;
