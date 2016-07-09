@@ -1,7 +1,8 @@
 'use strict';
 
-// let knex      = require('knex')(require('../config/knexfile')[process.env.NODE_ENV]);
-let knex      = require('knex')(require('../config/knexfile')["development"]);
+var env = process.env.NODE_ENV || "development";
+let knex = require('knex')(require('../config/knexfile')[env]);
+// let knex      = require('knex')(require('../config/knexfile')["development"]);
 
 let bookshelf = require('bookshelf')(knex);
 
