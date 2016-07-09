@@ -2,7 +2,7 @@
 
 // Import node module
 import express from 'express';
-import placesQuery from '../model/query'
+import placesQuery from '../model/query';
 
 const router = express.Router();
 
