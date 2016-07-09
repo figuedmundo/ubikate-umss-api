@@ -15,7 +15,7 @@ module.exports = {
       max: 10
     },
     migrations: {
-      directory: '../db/migrations',
+      directory: './config/migrations',
       tableName: 'knex_migrations'
     }
   },
@@ -28,7 +28,7 @@ module.exports = {
       max: 10
     },
     migrations: {
-      directory: '../db/migrations',
+      directory: './config/migrations',
       tableName: 'knex_migrations'
     }
   }
