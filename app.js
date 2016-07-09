@@ -23,9 +23,28 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.all('/*', function(req, res, next) {
+    // CORS headers
+    res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    // Set custom headers for CORS
+    res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token,X-Key,session_id');
+    if (req.method == 'OPTIONS') {
+        res.status(200).end();
+    } else {
+        next();
+    }
+});
+
+// Auth Middleware - This will check if the token is valid
+// Only the requests that start with /api/* will be checked for the token.
+// Any URL's that do not follow the below pattern should be avoided unless you
+// are sure that authentication is not needed
+app.all('/api/*', [require('./middlewares/validateRequest')]);
+
 app.use('/', routes);
-app.use('/users', users);
-app.use('/places', places);
+app.use('/api/v1/users', users);
+app.use('/api/v1/places', places);
 
 // using arrow syntax
 app.use((req, res, next) => {

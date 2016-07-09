@@ -1,0 +1,6 @@
+{
+    "node": true,
+    "sub":true,
+    "multistr": true,
+    "esversion": 6
+}
