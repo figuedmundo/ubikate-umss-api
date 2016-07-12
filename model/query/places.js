@@ -42,9 +42,9 @@ var getAll = (req, res) => {
 };
 
 var getPlace = (req, res) => {
-  let id = req.params.id;
+  var id = req.params.id;
 
-  let raw = "SELECT " +
+  var raw = "SELECT " +
               " ST_AsGeoJSON(geom)::json As geometry," +
               " name," +
               " gid As id " +
