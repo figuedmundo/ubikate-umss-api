@@ -1,12 +1,18 @@
 'use strict';
 
 import express from 'express';
+import users from '../model/query/users';
+
+
 const router = express.Router();
 
 // Arrow functions
 router.get('/', (req, res) => {
   res.send("respond ubikate");
 });
+
+router.get('/:id', users.getUser);
+
 // Exporting an object as the default import for this module
 export default router;
 
