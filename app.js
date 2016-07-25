@@ -12,6 +12,9 @@ import users        from './routes/users';
 import places       from './routes/places';
 import ways         from './routes/ways';
 
+import images       from './routes/images';
+// import Cloudinary   from './config/cloudinary';
+
 //using let
 let app = express();
 
@@ -37,6 +40,7 @@ app.all('/*', function(req, res, next) {
     }
 });
 
+
 // Auth Middleware - This will check if the token is valid
 // Only the requests that start with /api/* will be checked for the token.
 // Any URL's that do not follow the below pattern should be avoided unless you
@@ -47,6 +51,10 @@ app.use('/', routes);
 app.use('/api/v1/users', users);
 app.use('/api/v1/places', places);
 app.use('/api/v1/ways', ways);
+
+app.use('/api/v1/images', images);
+
+
 
 // using arrow syntax
 app.use((req, res, next) => {

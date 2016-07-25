@@ -9,6 +9,9 @@ router.post('/login', function(req, res) {
     var username = req.body.username || '';
     var password = req.body.password || '';
 
+    console.log(username);
+    console.log(password);
+
     if (username === '' || password === '') {
         _failWithInvalidCredentials(res);
         return;
