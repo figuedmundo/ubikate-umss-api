@@ -15,7 +15,7 @@
     "bluebird": "^3.4.1",
     "body-parser": "~1.15.1",
     "bookshelf": "^0.10.0",
-    "cloudinary": "^1.4.1",
+    "cloudinary": "*",
     "cookie-parser": "~1.4.3",
     "debug": "~2.2.0",
     "express": "~4.13.4",

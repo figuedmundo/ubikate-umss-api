@@ -1,16 +1,15 @@
 'use strict';
 
 import Bookshelf from '../config/database';
+// import PlaceImage from './placeImage';
 
-// require('./invoice');
 var Place = Bookshelf.Model.extend({
   tableName: 'place',
-  idAttribute: 'gid'
-  // hasTimestamps: true,
+  idAttribute: 'gid',
 
-  // invoices: function() {
-  //   return this.hasMany('Invoice');
-  // }
+  images: function() {
+    return this.hasMany('PlaceImage');
+  }
 });
 
 

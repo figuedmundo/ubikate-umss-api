@@ -12,6 +12,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', users.getUser);
+router.post('/new', users.newUser);
 
 // Exporting an object as the default import for this module
 export default router;

@@ -11,7 +11,10 @@ var getAll = (req, res) => {
         "               , ST_AsGeoJSON(geom)::json As geometry " +
         "               , to_json((name)) As name " +
         "               , to_json((gid)) As id " +
-        "      FROM place";
+        "               , description " +
+        "               , phone " +
+        "               , level " +
+        "        FROM place";
 
     Knex.raw(raw)
         .then(function(places) {
@@ -52,6 +55,35 @@ var getPlace = (req, res) => {
         });
 };
 
+var getPlacesByName = (req, res) => {
+    // var id = req.params.id;
+    var name = req.params.name;
+
+    var raw = "SELECT " +
+        " ST_AsGeoJSON(geom)::json As geometry," +
+        " name," +
+        " description," +
+        " phone," +
+        " level," +
+        " gid As id " +
+        " FROM place WHERE LOWER(name) like LOWER('%" + name + "%')";
+
+    Bookshelf.knex.raw(raw)
+        .then((places) => {
+          res
+              .status(200)
+              .json({
+                  status: 'success',
+                  data: places.rows,
+                  message: 'Retrieved ALL Places where name contains: ' + name
+              });
+        })
+        .catch((error) => {
+            console.log(error.message);
+            res.send("Error: ", error.message);
+        });
+};
+
 var newPlace = (req, res) => {
     var name = req.body.name || '';
     var lat = req.body.lat || '';
@@ -68,7 +100,7 @@ var newPlace = (req, res) => {
     }
 
     if (level === '') {
-      level = 0;
+        level = 0;
     }
 
     let raw = `insert into place (name, geom, description, phone, level)
@@ -102,9 +134,71 @@ function _failWithDataEmpty(res) {
         "message": "The place name and the coords should not be empty"
     });
 }
+
+var editPlace = (req, res) => {
+    var id = req.params.id;
+    var name = req.body.name || '';
+    // var lat = req.body.lat || '';
+    // var lon = req.body.lon || '';
+
+    var description = req.body.description || '';
+    var phone = req.body.phone || '';
+    var level = req.body.level || '';
+
+
+    if (name === '' || id === '') {
+        _failWithDataEmpty(res);
+        return;
+    }
+
+    if (level === '') {
+        level = 0;
+    }
+
+    Place.forge({
+            gid: id
+        })
+        .save({
+            name: name,
+            description: description,
+            phone: phone,
+            level: level
+        }, {
+            patch: true
+        })
+        .then(function(model) {
+            // ...
+            res.json({
+                "message": "Place updated successfully!",
+                "data": model
+            });
+        })
+        .catch(function(err) {
+            res.status(500).json({
+                error: true,
+                data: {
+                    message: err.message
+                }
+            });
+        });
+};
+
+
+//     .fetch({require: true})
+//     .then(function(place) {
+//       place.save({
+//         name: name || place.get('name'),
+//         description: description || place.get('description'),
+//         phone: phone || place.get('phone'),
+//         level: level || place.get('level'),
+//
+//       })
+// };
 //
 module.exports = {
     getAll: getAll,
     getPlace: getPlace,
-    newPlace: newPlace
+    newPlace: newPlace,
+    editPlace: editPlace,
+    getPlacesByName: getPlacesByName
 };
