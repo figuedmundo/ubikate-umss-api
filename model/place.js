@@ -8,7 +8,7 @@ var Place = Bookshelf.Model.extend({
   idAttribute: 'gid',
 
   images: function() {
-    return this.hasMany('PlaceImage');
+    return this.hasMany('PlaceImages');
   }
 });
 

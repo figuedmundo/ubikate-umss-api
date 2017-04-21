@@ -7,14 +7,17 @@ let Knex = Bookshelf.knex;
 
 
 var getAll = (req, res) => {
-    let raw = "SELECT 'place' As type " +
-        "               , ST_AsGeoJSON(geom)::json As geometry " +
-        "               , to_json((name)) As name " +
-        "               , to_json((gid)) As id " +
-        "               , description " +
-        "               , phone " +
-        "               , level " +
-        "        FROM place";
+    let raw = `SELECT 'place' As type
+                       , ST_AsGeoJSON(p.geom)::json As geometry
+                       , to_json((p.name)) As name
+                       , to_json((p.gid)) As id
+                       , p.description
+                       , p.phone
+                       , p.level
+                       , (string_agg(i.cloudinary_public_id, ',')) as images
+                FROM place p
+                LEFT JOIN place_images i ON p.gid = i.place_id
+                GROUP BY p.gid;`;
 
     Knex.raw(raw)
         .then(function(places) {
@@ -35,15 +38,20 @@ var getAll = (req, res) => {
 
 var getPlace = (req, res) => {
     var id = req.params.id;
-
-    var raw = "SELECT " +
-        " ST_AsGeoJSON(geom)::json As geometry," +
-        " name," +
-        " description," +
-        " phone," +
-        " level," +
-        " gid As id " +
-        " FROM place WHERE gid = " + id;
+    // (string_agg(i.cloudinary_public_id, ',')) as images
+    // GROUP BY p.gid
+    var raw = `SELECT
+         ST_AsGeoJSON(p.geom)::json As geometry,
+         p.name,
+         p.description,
+         p.phone,
+         p.level,
+         p.gid As id,
+         (string_agg(i.cloudinary_public_id, ',')) as images
+         FROM place p
+         LEFT JOIN place_images i ON p.gid = i.place_id
+         WHERE p.gid = ${id}
+         GROUP BY p.gid;`;
 
     Bookshelf.knex.raw(raw)
         .then((data) => {
@@ -59,15 +67,18 @@ var getPlacesByName = (req, res) => {
     // var id = req.params.id;
     var name = req.params.name;
 
-    var raw = "SELECT " +
-        " ST_AsGeoJSON(geom)::json As geometry," +
-        " name," +
-        " description," +
-        " phone," +
-        " level," +
-        " gid As id " +
-        " FROM place WHERE LOWER(name) like LOWER('%" + name + "%')";
-
+    var raw = `SELECT
+         ST_AsGeoJSON(p.geom)::json As geometry,
+         p.name,
+         p.description,
+         p.phone,
+         p.level,
+         p.gid As id,
+         (string_agg(i.cloudinary_public_id, ',')) as images
+         FROM place p
+         LEFT JOIN place_images i ON p.gid = i.place_id
+         WHERE LOWER(p.name) like LOWER('%${name}%')
+         GROUP BY p.gid;`;
     Bookshelf.knex.raw(raw)
         .then((places) => {
           res
@@ -195,10 +206,33 @@ var editPlace = (req, res) => {
 //       })
 // };
 //
+
+var visitedCount = (req, res) => {
+  console.log("**************visited ******************************");
+    Place.forge()
+    .where('visit_count', '>', '1')
+    .orderBy('visit_count', 'DESC')
+    .query((qb) => qb.limit(10))
+    .fetchAll({columns: ["name as label", "visit_count as value"]})
+    .then((visited) => {
+        if (visited) {
+            res.json(visited.toJSON());
+        } else {
+            res.status(404).json({});
+        }
+    })
+    .catch((err) => {
+        res.status(500).json({
+            message: err.message
+        });
+    });
+};
+
 module.exports = {
     getAll: getAll,
     getPlace: getPlace,
     newPlace: newPlace,
     editPlace: editPlace,
-    getPlacesByName: getPlacesByName
+    getPlacesByName: getPlacesByName,
+    visitedCount: visitedCount
 };

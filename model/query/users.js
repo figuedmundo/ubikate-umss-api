@@ -4,7 +4,7 @@ import Bookshelf from '../../config/database';
 import User from '../../model/user';
 import sha1 from 'sha1';
 
-let Knex = Bookshelf.knex;
+//let Knex = Bookshelf.knex;
 
 
 var getUser = (req, res) => {

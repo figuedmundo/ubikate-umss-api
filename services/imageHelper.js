@@ -5,9 +5,13 @@ import fs from 'fs';
 
 
 var saveImage = (req, res, next) => {
-    // let imagePath = req.params.cloudinary['file'];
-    //
-    // console.log(imagePath);
+    let body = req.body;
+
+    console.log(body);
+    res.json({
+      data: body
+    });
+
     // //
     // // var name = imagePath;
     // //
@@ -35,10 +39,10 @@ var saveImage = (req, res, next) => {
     //         data: result
     //     });
     // });
-    var imageStream = fs.createReadStream(req.body, { encoding: 'binary' });
-    var cloudStream = Cloudinary.uploader.upload_stream(function() { res.redirect('/'); });
-
-    imageStream.on('data', cloudStream.write).on('end', cloudStream.end);
+    // var imageStream = fs.createReadStream(req.body, { encoding: 'binary' });
+    // var cloudStream = Cloudinary.uploader.upload_stream(function() { res.redirect('/'); });
+    //
+    // imageStream.on('data', cloudStream.write).on('end', cloudStream.end);
 };
 
 let getAll = (req, res, next) => {

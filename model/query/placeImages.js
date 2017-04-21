@@ -1,13 +1,13 @@
 'use strict';
 
 import Bookshelf from '../../config/database';
-import PlaceImage from '../../model/placeImage';
+import PlaceImages from '../../model/placeImages';
 
 
 var getImages = (req, res) => {
     var place_id = req.params.place_id;
 
-    PlaceImage.forge({
+    PlaceImages.forge({
             place_id: place_id
         })
         .fetch()
@@ -30,20 +30,23 @@ function _failWithDataEmpty(res) {
     res.status(401);
     res.json({
         "status": 401,
-        "message": "The place name and the coords should not be empty"
+        "message": "Couldn't get the place to insert the image"
     });
 }
 
 var newImage = (req, res) => {
-    var place_id = req.body.place_id || '';
+    var place_id = req.params.place_id || '';
+    console.log(place_id);
+
     var cloudinary_public_id = req.body.cloudinary_public_id || '';
+    console.log(cloudinary_public_id);
 
     if (place_id === '' || cloudinary_public_id === '') {
         _failWithInvalidCredentials(res);
         return;
     }
 
-    PlaceImage.forge()
+    PlaceImages.forge()
         .save({
             place_id: place_id,
             cloudinary_public_id: cloudinary_public_id

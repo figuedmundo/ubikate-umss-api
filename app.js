@@ -55,6 +55,9 @@ app.use('/api/v1/ways', ways);
 app.use('/api/v1/images', images);
 
 
+// app.use('/api/v1/placeImages', images);
+
+
 
 // using arrow syntax
 app.use((req, res, next) => {

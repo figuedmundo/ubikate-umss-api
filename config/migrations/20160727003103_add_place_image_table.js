@@ -1,7 +1,7 @@
 
 exports.up = function(knex, Promise) {
   return Promise.all([
-    knex.schema.createTable('place_image', function (table) {
+    knex.schema.createTable('place_images', function (table) {
       table.increments().primary();
       table.string('cloudinary_public_id');
 
@@ -13,6 +13,6 @@ exports.up = function(knex, Promise) {
 
 exports.down = function(knex, Promise) {
   return Promise.all([
-      knex.schema.dropTable('place_image')
+      knex.schema.dropTable('place_images')
   ]);
 };

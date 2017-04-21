@@ -3,8 +3,8 @@
 import Bookshelf from '../config/database';
 // import Place from './place';
 
-var PlaceImage = Bookshelf.Model.extend({
-  tableName: 'place_image',
+var PlaceImages = Bookshelf.Model.extend({
+  tableName: 'place_images',
   idAttribute: 'id',
 
   place: function() {
@@ -13,4 +13,4 @@ var PlaceImage = Bookshelf.Model.extend({
 });
 
 
-module.exports = Bookshelf.model('PlaceImage', PlaceImage);
+module.exports = Bookshelf.model('PlaceImages', PlaceImages);

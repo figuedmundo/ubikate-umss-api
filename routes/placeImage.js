@@ -4,10 +4,10 @@
 import express from 'express';
 import placeImages from '../model/query/placeImages';
 
-const router = express.Router();
+const router = express.Router({mergeParams: true});
 
-router.post('/new', placeImages.newImage);
-router.get('/:place_id', placeImages.getImages);
+router.post('/', placeImages.newImage);
+router.get('/', placeImages.getImages);
 
 // Exporting an object as the default import for this module
 export default router;
