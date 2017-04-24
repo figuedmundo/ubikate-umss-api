@@ -47,10 +47,7 @@ let getWay = (req, res) => {
                 }
             }, this);
 
-            // res.send(edges);
-            var wayGeomQuery = "select ST_AsGeoJSON(ST_Transform(geom, 4326)) from ways where gid = 486;";
-
-            //return Knex.raw(wayGeomQuery);
+            // gets the lines that are the shortes route
             return Knex.select(Knex.raw("ST_AsGeoJSON(ST_Transform(geom, 4326))")).from(Knex.raw("ways")).whereIn("gid", edges);
         })
         .then((data) => {

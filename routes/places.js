@@ -13,6 +13,7 @@ router.get('/search/:name', places.getPlacesByName);
 router.post('/new', places.newPlace);
 router.put('/:id/edit', places.editPlace);
 router.get('/visited/count', places.visitedCount);
+router.put('/:id/visit', places.updatePlaceVisited);
 
 
 // // you can nest routers by attaching them as middleware:

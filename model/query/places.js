@@ -228,11 +228,53 @@ var visitedCount = (req, res) => {
     });
 };
 
+var updatePlaceVisited = (req, res) => {
+  var id = req.params.id;
+
+    Place.forge({
+            gid: id
+        })
+    .fetch({columns: "visit_count"})
+    .then((visited) => {
+      let count = (visited.attributes.visit_count) || 0;
+      Place.forge({
+              gid: id
+          })
+          .save({
+              visit_count: count + 1
+          }, {
+              patch: true
+          })
+          .then(function(model) {
+              // ...
+              res.json({
+                  "message": "Place updated successfully!",
+                  "data": model
+              });
+          })
+          .catch(function(err) {
+              res.status(500).json({
+                  error: true,
+                  data: {
+                      message: err.message
+                  }
+              });
+          });
+
+    })
+    .catch((err) => {
+        res.status(500).json({
+            message: err.message
+        });
+    });
+};
+
 module.exports = {
     getAll: getAll,
     getPlace: getPlace,
     newPlace: newPlace,
     editPlace: editPlace,
     getPlacesByName: getPlacesByName,
-    visitedCount: visitedCount
+    visitedCount: visitedCount,
+    updatePlaceVisited: updatePlaceVisited
 };
