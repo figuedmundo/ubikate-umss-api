@@ -7,27 +7,55 @@
 var app = require('../app');
 var debug = require('debug')('ubikate-umss-api:server');
 var http = require('http');
+var https = require('https');
+var fs = require('fs');
+
+/**
+ * SSL
+ */
+var sslOptions = {
+  key: fs.readFileSync('resources/key.pem'),
+  cert: fs.readFileSync('resources/cert.pem'),
+  passphrase: 'Control123'
+};
 
 /**
  * Get port from environment and store in Express.
  */
-
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
+ * Get https port from environment and store in Express.
+ */
+var port_ssl = normalizePort(process.env.PORT || '3443');
+app.set('port_ssl', port_ssl);
+
+
+/**
  * Create HTTP server.
  */
-
 var server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+/**
+ * Create HTTPS server.
+ */
+var server_ssl = https.createServer(sslOptions, app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+server_ssl.listen(port_ssl);
+server_ssl.on('error', onError);
+server_ssl.on('listening', onListening);
+
 
 /**
  * Normalize a port into a number, string, or false.
