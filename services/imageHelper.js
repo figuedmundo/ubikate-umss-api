@@ -2,47 +2,34 @@
 
 import Cloudinary from '../config/cloudinary';
 import fs from 'fs';
+import formidable from 'formidable';
+import del from 'del';
 
 
 var saveImage = (req, res, next) => {
-    let body = req.body;
+    var form = new formidable.IncomingForm();
+    form.parse(req);
 
-    console.log(body);
-    res.json({
-      data: body
+    form.on('fileBegin', function (name, file){
+        file.path = __dirname + '/tmp/' + file.name;
     });
 
-    // //
-    // // var name = imagePath;
-    // //
-    // // console.log(name);
-    // //
-    // // res.json({
-    // //   messageClou: imagePath
-    // // });
-    // // console.log(imagePath);
-    //
-    // // res.send(imagePath);
-    // //
-    // // if (imagePath === '') {
-    // //     res.status(401);
-    // //     res.json({
-    // //         "status": 401,
-    // //         "message": "Image not found"
-    // //     });
-    // // }
-    //
-    // Cloudinary.uploader.upload(imagePath, function(result) {
-    //     console.log(result);
-    //     res.json({
-    //         message: "Image saved successfully",
-    //         data: result
-    //     });
-    // });
-    // var imageStream = fs.createReadStream(req.body, { encoding: 'binary' });
-    // var cloudStream = Cloudinary.uploader.upload_stream(function() { res.redirect('/'); });
-    //
-    // imageStream.on('data', cloudStream.write).on('end', cloudStream.end);
+    form.on('file', function (name, file){
+        console.log(name);
+        console.log('Uploaded ' + file.name);
+
+        Cloudinary.uploader.upload(file.path, function(result) {
+            console.log(result);
+            del([__dirname + '/tmp/*.*']).then(paths => {
+          	   console.log('Deleted files and folders:\n', paths.join('\n'));
+            });
+            
+            res.json({
+                message: "Image saved successfully",
+                data: result
+            });
+        });
+    });
 };
 
 let getAll = (req, res, next) => {
@@ -70,6 +57,7 @@ let getImage = (req, res, next) => {
         res.send(result.url);
     });
 };
+
 
 module.exports = {
     saveImage: saveImage,
