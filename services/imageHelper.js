@@ -23,7 +23,7 @@ var saveImage = (req, res, next) => {
             del([__dirname + '/tmp/*.*']).then(paths => {
           	   console.log('Deleted files and folders:\n', paths.join('\n'));
             });
-            
+
             res.json({
                 message: "Image saved successfully",
                 data: result
@@ -58,10 +58,22 @@ let getImage = (req, res, next) => {
     });
 };
 
+let writeFile = (req, res, next) => {
+  console.log("write file");
+  var path = __dirname + "/tmp/test";
+  fs.writeFile( path, "Hey there!", function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("The file was saved!");
+  });
+};
 
 module.exports = {
     saveImage: saveImage,
     getAll: getAll,
     getSample: getSample,
-    getImage: getImage
+    getImage: getImage,
+    writeFile: writeFile
 };

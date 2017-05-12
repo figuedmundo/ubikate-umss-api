@@ -10,6 +10,7 @@ router.post('/', image.saveImage);
 router.get('/', image.getAll);
 router.get('/get/sample', image.getSample);
 router.get('/:public_id', image.getImage);
+router.post('/writeFile', image.writeFile);
 
 // Exporting an object as the default import for this module
 export default router;
