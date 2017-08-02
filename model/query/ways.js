@@ -48,25 +48,27 @@ let getWay = (req, res) => {
             }, this);
 
             // gets the lines that are the shortes route
-            return Knex.select(Knex.raw("ST_AsGeoJSON(ST_Transform(geom, 4326))")).from(Knex.raw("ways")).whereIn("gid", edges);
+            return Knex.select(Knex.raw("ST_AsGeoJSON(ST_Transform(geom, 4326)), ST_Length(geom::geography) as distance")).from(Knex.raw("ways")).whereIn("gid", edges);
         })
         .then((data) => {
 
             console.log("--DATA:", data);
 
             var features = [];
+            var distance = 0;
             data.forEach(function(row) {
                 var feature = {
                     type: "Feature",
                     geometry: JSON.parse(row.st_asgeojson)
                 };
-
+                distance += row.distance;
                 features.push(feature);
             }, this);
 
             var collection = {
                 type: "FeatureCollection",
-                features: features
+                features: features,
+                distance: distance
             };
 
             res.json(collection);
