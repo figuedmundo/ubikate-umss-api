@@ -53,8 +53,8 @@ let getImage = (req, res, next) => {
     let imageId = req.params.public_id;
     console.log(imageId);
     Cloudinary.api.resource(imageId, (result) => {
-        console.log(result.url);
-        res.send(result.url);
+        console.log(result.secure_url);
+        res.send(result.secure_url);
     });
 };
 
