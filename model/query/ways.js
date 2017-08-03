@@ -68,7 +68,8 @@ let getWay = (req, res) => {
             var collection = {
                 type: "FeatureCollection",
                 features: features,
-                distance: distance
+                distance: distance,
+                time: getTime(distance)
             };
 
             res.json(collection);
@@ -78,6 +79,10 @@ let getWay = (req, res) => {
             console.log(error);
             res.send("Error");
         });
+};
+
+let getTime = (distance) =>{
+  return Math.round(((distance * 3) / 250) * 100 ) / 100;
 };
 
 //
