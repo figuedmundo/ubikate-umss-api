@@ -1,10 +1,10 @@
 {
   "name": "ubikate-umss-api",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "license": "MIT",
-  "repository": "n/a",
-  "author": "Steven",
+  "repository": "https://github.com/figuedmundo/ubikate-umss-api",
+  "author": "Edmundo Figueroa",
   "scripts": {
     "lint": "eslint app.js",
     "_start": "babel-node ./bin/www",
